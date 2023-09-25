@@ -1,0 +1,40 @@
+
+//POST: Here we check if the email and password given by the user match.
+
+import { NextResponse } from 'next/server'
+import { TokenCookie} from "@/app/utility/TokenCookie";
+import {cookies} from "next/headers";
+
+export async function POST(req,res,) {
+    const JsonBody = await req.json()
+    let email=JsonBody['email'];
+    let password=JsonBody['password'];
+    //Data Checking
+    if(email==="e@mail.com" && password==="123"){
+
+        let Cookie =await TokenCookie(email);
+        //const result=  await GETs(email)
+        return NextResponse.json(
+            {status:true,message:"Request completed"},
+            {status: 200, headers:Cookie}
+        )
+        
+        
+    }
+    
+    
+    else{
+        return NextResponse.json(
+            {status:false,message:"Request Fail"}
+        )
+    }
+}
+
+
+//Our browser deletes the cookies it has
+export async function GET(req,res) {
+    cookies().delete('token')
+    return NextResponse.json(
+        {status:true,message:"Request Completed"}
+    )
+}
